@@ -1,9 +1,9 @@
 const express = require('express');
-const app = express();
-const server = require('http').Server(app);
+const app = require('./app.js');
+const server = require('./app.js');
 const io = require('socket.io')(server);
 const records = require('./core-records.js');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3005;
 var channelKeyword = '';
 let WWWcounttext = 0;
 let WWWcountroll = 0
@@ -16,7 +16,7 @@ require('fs').readdirSync('./modules/').forEach(function (file) {
 // 加入線上人數計數
 let onlineCount = 0;
 
-app.get('/', (req, res) => {
+app.app.get('/aa', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
 });
 
@@ -110,6 +110,6 @@ records.on("new_message", (message) => {
     }
 });
 
-server.listen(port, () => {
+server.http.listen(port, () => {
     console.log("Server Started. port:" + port);
 });

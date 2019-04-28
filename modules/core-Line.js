@@ -14,9 +14,6 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 	const line = require('@line/bot-sdk');
 	const express = require('express');
 
-
-
-
 	function replymessage(message) {
 		return {
 			type: 'text',
@@ -56,7 +53,7 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 
 	// register a webhook handler with middleware
 	// about the middleware, please refer to doc
-	app.post('/', line.middleware(config), (req, res) => {
+	module.exports.app.post('/', line.middleware(config), (req, res) => {
 		Promise
 			.all(req.body.events.map(handleEvent))
 			.then((result) => res.json(result))
