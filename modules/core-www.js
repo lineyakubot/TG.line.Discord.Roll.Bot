@@ -50,62 +50,66 @@ io.on('connection', (socket) => {
 
 records.on("new_message", (message) => {
     // 廣播訊息到聊天室
-    console.log(message)
-    io.emit("msg", message);
 
+    if (message.msg && message.name.match(/HKTRPG/ig)) {
 
-    let rplyVal = {}
-    let msgSplitor = (/\S+/ig)
-    if (message.msg && message.name !== 'HKTRPG')
+    } else {
+        console.log(message)
+        io.emit("msg", message);
+        let rplyVal = {}
+        let msgSplitor = (/\S+/ig)
         var mainMsg = message.msg.match(msgSplitor); // 定義輸入字串
-    if (mainMsg && mainMsg[0])
-        var trigger = mainMsg[0].toString().toLowerCase(); // 指定啟動詞在第一個詞&把大階強制轉成細階
+        if (mainMsg && mainMsg[0])
+            var trigger = mainMsg[0].toString().toLowerCase(); // 指定啟動詞在第一個詞&把大階強制轉成細階
 
-    // 訊息來到後, 會自動跳到analytics.js進行骰組分析
-    // 如希望增加修改骰組,只要修改analytics.js的條件式 和ROLL內的骰組檔案即可,然後在HELP.JS 增加說明.
+        // 訊息來到後, 會自動跳到analytics.js進行骰組分析
+        // 如希望增加修改骰組,只要修改analytics.js的條件式 和ROLL內的骰組檔案即可,然後在HELP.JS 增加說明.
 
-    let privatemsg = 0
-    if (trigger == 'dr' && mainMsg && mainMsg[1]) {
-        privatemsg = 1
-        mainMsg.shift()
-        trigger = mainMsg[0].toString().toLowerCase()
-    }
-    if (channelKeyword != '' && trigger == channelKeyword.toString().toLowerCase()) {
-        mainMsg.shift()
-        rplyVal = exports.analytics.parseInput(mainMsg.join(' '))
-    } else {
-        if (channelKeyword == '') {
+        let privatemsg = 0
+        if (trigger == 'dr' && mainMsg && mainMsg[1]) {
+            privatemsg = 1
+            mainMsg.shift()
+            trigger = mainMsg[0].toString().toLowerCase()
+        }
+        if (channelKeyword != '' && trigger == channelKeyword.toString().toLowerCase()) {
+            mainMsg.shift()
             rplyVal = exports.analytics.parseInput(mainMsg.join(' '))
+        } else {
+            if (channelKeyword == '') {
+                rplyVal = exports.analytics.parseInput(mainMsg.join(' '))
 
-        }
-
-    }
-
-    if (rplyVal && rplyVal.text) {
-        WWWcountroll++;
-        //console.log('rplyVal.text:' + rplyVal.text)
-        //console.log('Telegram Roll: ' + WWWcountroll + ', Telegram Text: ' + WWWcounttext, " content: ", message.text);
-
-        async function loadb() {
-            for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
-                await io.emit("msg", { name: 'HKTRPG', msg: rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i] });
-                //message.reply.text(rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i])
             }
+
         }
-        loadb();
+
+        if (rplyVal && rplyVal.text) {
+            WWWcountroll++;
+            //console.log('rplyVal.text:' + rplyVal.text)
+            //console.log('Telegram Roll: ' + WWWcountroll + ', Telegram Text: ' + WWWcounttext, " content: ", message.text);
+
+            async function loadb() {
+                for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
+                    await io.emit("msg", {
+                        name: 'HKTRPG',
+                        msg: rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i]
+                    });
+                    //message.reply.text(rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i])
+                }
+            }
+            loadb();
 
 
-        // console.log("rplyVal: " + rplyVal)
-    } else {
-        //console.log(rplyVal.text, " ")
-        WWWcounttext++;
-        if (WWWcounttext % 500 == 0)
-            console.log('WWW Roll: ' + WWWcountroll + ', WWW Text: ' + WWWcounttext);
+            // console.log("rplyVal: " + rplyVal)
+        } else {
+            //console.log(rplyVal.text, " ")
+            WWWcounttext++;
+            if (WWWcounttext % 500 == 0)
+                console.log('WWW Roll: ' + WWWcountroll + ', WWW Text: ' + WWWcounttext);
+        }
+
     }
-
-
 });
 
 server.listen(port, () => {
-    console.log("Server Started. http://localhost:" + port);
+    console.log("Server Started. port:" + port);
 });
