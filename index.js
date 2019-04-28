@@ -24,36 +24,3 @@ Discord line Telegram三套BOT 都會統一呼叫analytics.js
 感謝
 
 */
-
-const express = require('express');
-const app = express();
-
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
-
-app.listen(3000, () => {
-    console.log("Server Started. http://localhost:3000");
-});
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-const express = require('express');
-const app = express();
- 
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
- 
-app.listen(3000, () => {
-    console.log("Server Started. http://localhost:3000");
-});
