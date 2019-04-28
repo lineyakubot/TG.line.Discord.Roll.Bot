@@ -4,12 +4,20 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const records = require('./core-records.js');
 const port = process.env.PORT || 3000;
-
+var channelKeyword = '';
+let WWWcounttext = 0;
+let WWWcountroll = 0
+require('fs').readdirSync('./modules/').forEach(function (file) {
+    if (file.match(/\.js$/) !== null && file !== 'index.js' && file.match(/^core-/) == null) {
+        var name = file.replace('.js', '');
+        exports[name] = require('../modules/' + file);
+    }
+});
 // 加入線上人數計數
 let onlineCount = 0;
 
 app.get('/', (req, res) => {
-    res.sendFile( __dirname + '/views/index.html');
+    res.sendFile(__dirname + '/views/index.html');
 });
 
 io.on('connection', (socket) => {
@@ -35,15 +43,67 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         // 有人離線了，扣人
-        onlineCount = (onlineCount < 0) ? 0 : onlineCount-=1;
+        onlineCount = (onlineCount < 0) ? 0 : onlineCount -= 1;
         io.emit("online", onlineCount);
     });
 });
 
-records.on("new_message", (msg) => {
+records.on("new_message", (message) => {
     // 廣播訊息到聊天室
-    console.log(msg)
-    io.emit("msg", msg);
+    console.log(message)
+    io.emit("msg", message);
+
+
+    let rplyVal = {}
+    let msgSplitor = (/\S+/ig)
+    if (message.msg && message.name !== 'HKTRPG')
+        var mainMsg = message.msg.match(msgSplitor); // 定義輸入字串
+    if (mainMsg && mainMsg[0])
+        var trigger = mainMsg[0].toString().toLowerCase(); // 指定啟動詞在第一個詞&把大階強制轉成細階
+
+    // 訊息來到後, 會自動跳到analytics.js進行骰組分析
+    // 如希望增加修改骰組,只要修改analytics.js的條件式 和ROLL內的骰組檔案即可,然後在HELP.JS 增加說明.
+
+    let privatemsg = 0
+    if (trigger == 'dr' && mainMsg && mainMsg[1]) {
+        privatemsg = 1
+        mainMsg.shift()
+        trigger = mainMsg[0].toString().toLowerCase()
+    }
+    if (channelKeyword != '' && trigger == channelKeyword.toString().toLowerCase()) {
+        mainMsg.shift()
+        rplyVal = exports.analytics.parseInput(mainMsg.join(' '))
+    } else {
+        if (channelKeyword == '') {
+            rplyVal = exports.analytics.parseInput(mainMsg.join(' '))
+
+        }
+
+    }
+
+    if (rplyVal && rplyVal.text) {
+        WWWcountroll++;
+        //console.log('rplyVal.text:' + rplyVal.text)
+        //console.log('Telegram Roll: ' + WWWcountroll + ', Telegram Text: ' + WWWcounttext, " content: ", message.text);
+
+        async function loadb() {
+            for (var i = 0; i < rplyVal.text.toString().match(/[\s\S]{1,2000}/g).length; i++) {
+                await io.emit("msg", { name: 'HKTRPG', msg: rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i] });
+                //message.reply.text(rplyVal.text.toString().match(/[\s\S]{1,2000}/g)[i])
+            }
+        }
+        loadb();
+
+
+        // console.log("rplyVal: " + rplyVal)
+    } else {
+        //console.log(rplyVal.text, " ")
+        WWWcounttext++;
+        if (WWWcounttext % 500 == 0)
+            console.log('WWW Roll: ' + WWWcountroll + ', WWW Text: ' + WWWcounttext);
+    }
+
+
 });
 
 server.listen(port, () => {
