@@ -166,11 +166,5 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 		console.log(`Line BOT listening on ${port}`);
 	});
 
-	app.get('/', function (req, res) {
-		//	res.send(parseInput(req.query.input));
-		res.send('Hello');
-	});
-
-
 
 }
