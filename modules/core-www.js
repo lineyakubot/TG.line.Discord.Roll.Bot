@@ -1,6 +1,10 @@
 const express = require('express');
-const app = require('./app.js');
-const server = require('./app.js');
+
+const app = require('./app.js').app;
+const server = require('./app.js').http;
+//var express = require('express');
+//var app = require('express')();
+//var http = require('http').createServer(app);
 const io = require('socket.io')(server);
 const records = require('./core-records.js');
 const port = process.env.PORT || 3005;
@@ -16,11 +20,13 @@ require('fs').readdirSync('./modules/').forEach(function (file) {
 // 加入線上人數計數
 let onlineCount = 0;
 
-app.app.get('/aa', (req, res) => {
+app.get('/aa', (req, res) => {
+    console.log('req: ', req, 'res: ', res)
     res.sendFile(__dirname + '/views/index.html');
 });
 
 io.on('connection', (socket) => {
+
     // 有連線發生時增加人數
     onlineCount++;
     // 發送人數給網頁
@@ -110,6 +116,6 @@ records.on("new_message", (message) => {
     }
 });
 
-server.http.listen(port, () => {
+server.listen(port, () => {
     console.log("Server Started. port:" + port);
 });

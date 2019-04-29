@@ -1,4 +1,4 @@
-var express = require('express');
+/*var express = require('express');
 var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
@@ -7,6 +7,7 @@ app.use(express.static(__dirname + '/public'));
 
 
 app.get('/', function (req, res) {
+    console.log('req: ', req, 'res: ', res)
     res.sendfile('index.html');
 });
 
@@ -16,6 +17,7 @@ var allUsers = [{
     color: "#000"
 }]; //初始值即包含"群聊",用""表示nickname
 io.on('connection', function (socket) {
+    console.log(socket)
     socket.on('addUser', function (data) { //有新用户进入聊天室
         if (connectedSockets[data.nickname]) { //昵称已被占用
             socket.emit('userAddingResult', {
@@ -70,3 +72,4 @@ module.exports = {
     app,
     http
 }
+*/
