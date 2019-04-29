@@ -162,6 +162,9 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 	app.listen(port, () => {
 		console.log(`Line BOT listening on ${port}`);
 	});
-
+	module.exports = {
+		app,
+		express
+	}
 
 }
