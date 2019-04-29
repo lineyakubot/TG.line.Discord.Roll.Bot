@@ -117,6 +117,6 @@ records.on("new_message", (message) => {
     }
 });
 
-server.listen(port, () => {
+app.listen(port, () => {
     console.log("Server Started. port:" + port);
 });
