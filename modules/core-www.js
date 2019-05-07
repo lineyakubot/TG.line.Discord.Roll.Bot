@@ -20,7 +20,7 @@ require('fs').readdirSync('./modules/').forEach(function (file) {
 // 加入線上人數計數
 let onlineCount = 0;
 
-www.get('/aa', (req, res) => {
+www.get('/', (req, res) => {
     console.log('req: ', req, 'res: ', res)
     res.sendFile(__dirname + '/views/index.html');
 });
