@@ -1,11 +1,10 @@
-const express = require('express');
-
-const app = require('./core-Line').app;
-var server = require('http').createServer(app);
-//const server = require('./app.js').http;
+const express = require('./core-Line').express;
+const www = require('./core-Line').app;
+var server = require('http').createServer(www);
+//const server = require('./www.js').http;
 //var express = require('express');
-//var app = require('express')();
-//var http = require('http').createServer(app);
+//var www = require('express')();
+//var http = require('http').createServer(www);
 const io = require('socket.io')(server);
 const records = require('./core-records.js');
 const port = process.env.PORT || 3005;
@@ -21,7 +20,7 @@ require('fs').readdirSync('./modules/').forEach(function (file) {
 // 加入線上人數計數
 let onlineCount = 0;
 
-app.get('/aa', (req, res) => {
+www.get('/aa', (req, res) => {
     console.log('req: ', req, 'res: ', res)
     res.sendFile(__dirname + '/views/index.html');
 });
@@ -117,6 +116,6 @@ records.on("new_message", (message) => {
     }
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log("Server Started. port:" + port);
 });

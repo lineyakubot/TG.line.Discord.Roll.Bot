@@ -158,10 +158,7 @@ if (process.env.LINE_CHANNEL_ACCESSTOKEN) {
 	}
 
 	// listen on port
-	const port = process.env.PORT || 5000;
-	app.listen(port, () => {
-		console.log(`Line BOT listening on ${port}`);
-	});
+	const port = process.env.PORT || 3005;
 	module.exports = {
 		app,
 		express
