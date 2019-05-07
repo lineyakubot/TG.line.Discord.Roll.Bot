@@ -1,4 +1,4 @@
-const express = require('./core-Line').express;
+/*const express = require('./core-Line').express;
 const www = require('./core-Line').app;
 var server = require('http').createServer(www);
 //const server = require('./www.js').http;
@@ -119,3 +119,4 @@ records.on("new_message", (message) => {
 server.listen(port, () => {
     console.log("Server Started. port:" + port);
 });
+*/
