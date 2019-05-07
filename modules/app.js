@@ -1,4 +1,4 @@
-var express = require('./core-Line').express;
+/*var express = require('./core-Line').express;
 var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
@@ -72,3 +72,4 @@ module.exports = {
     app,
     http
 }
+*/
