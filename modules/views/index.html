@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi"
+        content="width=device-width" />
     <title>My Chatroom</title>
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -18,7 +20,7 @@
 
         #container {
             top: 50px;
-            width: 500px;
+            width: 50%;
             margin: 0 auto;
             display: block;
             position: relative;
@@ -30,11 +32,17 @@
         }
 
         #content {
-            width: 100%;
-            height: 350px;
-            border: 1px solid darkolivegreen;
+            width: 50%;
+            height: 500px;
+            border: solid blue 10px;
             border-radius: 5px;
             overflow: auto;
+
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+
+            white-space: pre-wrap;
         }
 
         #send-box {
